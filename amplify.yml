@@ -1,24 +1,16 @@
-version: 1
-backend:
-  phases:
-    install:
-      commands:
-        - echo "Installing Python dependencies..."
-        - pip install -r requirements.txt
+version: '3.8'
+
+services:
+  backend:
     build:
-      commands:
-        - python backend/server.py
-        - cd frontend
-        - npm i
-frontend:
-  phases:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "5000:5000"  # Map port 5000 of the container to port 5000 on the host
+
+  frontend:
     build:
-      commands:
-        - npm run build
-  artifacts:
-    baseDirectory: frontend/dist
-    files:
-      - '**/*'
-  cache:
-    paths:
-      - .npm/**/*
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:3000"  # Map port 3000 of the container to port 3000 on the host
