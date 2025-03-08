@@ -1,16 +1,29 @@
-version: '3.8'
-
-services:
-  backend:
+version: 1
+backend:
+  phases:
+    install:
+      commands:
+        - echo "Installing Python dependencies..."
+        - pip install -r requirements.txt
+    pre_build:
+      commands:
+        - echo "Starting the Flask server in the background..."
+        - nohup python backend/server.py &
     build:
-      context: .
-      dockerfile: Dockerfile.backend
-    ports:
-      - "5000:5000"  # Map port 5000 of the container to port 5000 on the host
-
-  frontend:
+      commands:
+        - echo "Building the frontend..."
+        - cd frontend
+        - npm install
+        - npm run build
+frontend:
+  phases:
     build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    ports:
-      - "3000:3000"  # Map port 3000 of the container to port 3000 on the host
+      commands:
+        - echo "Frontend build completed."
+  artifacts:
+    baseDirectory: frontend/dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .npm/**/*
