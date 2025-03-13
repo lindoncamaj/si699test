@@ -7,23 +7,5 @@ backend:
         - pip install -r requirements.txt
     pre_build:
       commands:
-        - echo "Starting the Flask server in the background..."
-        - nohup python backend/server.py &
-    build:
-      commands:
-        - echo "Building the frontend..."
-        - cd frontend
-        - npm install
-        - npm run build
-frontend:
-  phases:
-    build:
-      commands:
-        - echo "Frontend build completed."
-  artifacts:
-    baseDirectory: frontend/dist
-    files:
-      - '**/*'
-  cache:
-    paths:
-      - .npm/**/*
+        - echo "Starting the Flask server..."
+        - python backend/server.py
