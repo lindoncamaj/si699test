@@ -5,7 +5,7 @@ import requests
 from rec_system import recommend
 from marketcheck import check
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../frontend/dist', static_url_path='/')
 cors = CORS(app, origins='*')
 
 CAR_API = "https://carapi.app/api/makes"
@@ -87,6 +87,10 @@ def makes():
         return jsonify(makes)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route('/')
+def serve():
+   return app.send_static_file("index.html")
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
